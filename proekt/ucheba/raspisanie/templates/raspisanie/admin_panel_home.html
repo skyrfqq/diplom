@@ -4,12 +4,12 @@
 {% block title %}Панель администратора - Колледж КТ МТУСИ{% endblock %}
 
 {% block menu %}
-    <a href="{% url 'admin_panel_home' %}">Главная</a>
-    <a href="{% url 'user_list' %}">Пользователи</a>
-    <a href="{% url 'group_list' %}">Группы</a>
-    <a href="{% url 'teacher_list' %}">Преподаватели</a>
-    <a href="{% url 'subject_list' %}">Предметы</a>
-    <a href="{% url 'schedule_list' %}">Расписание</a>
+    <a href="{% url 'raspisanie:admin_panel_home' %}">Главная</a>
+    <a href="{% url 'raspisanie:user_list' %}">Пользователи</a>
+    <a href="{% url 'raspisanie:group_list' %}">Группы</a>
+    <a href="{% url 'raspisanie:teacher_list' %}">Преподаватели</a>
+    <a href="{% url 'raspisanie:subject_list' %}">Предметы</a>
+    <a href="{% url 'raspisanie:schedule_list' %}">Расписание</a>
 {% endblock %}
 
 {% block content %}

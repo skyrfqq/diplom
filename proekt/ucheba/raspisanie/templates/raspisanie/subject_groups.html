@@ -1,0 +1,24 @@
+{% extends 'raspisanie/panel_base.html' %}
+{% block title %}Группы по предмету{% endblock %}
+{% block content %}
+    <div class="groups-container">
+        <h1>Группы по предмету: {{ subject.name }}</h1>
+        <div class="groups-content">
+            {% if groups %}
+                <div class="groups-list">
+                    {% for group in groups %}
+                        <div class="group-card">
+                            <h3>{{ group.name }}</h3>
+                            <p>Количество студентов: {{ group.students.count }}</p>
+                            <a href="{% url 'raspisanie:group_students' group.id %}" class="group-button">Просмотр студентов</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-groups">
+                    <p>У этого предмета пока нет групп.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %} 

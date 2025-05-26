@@ -1,86 +1,18 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>О колледже</title>
-    <link rel="stylesheet" href="{% static 'style/style.css' %}">
-    <script src="js/calendar.js"></script>
-</head>
-<body>
+{% extends 'raspisanie/base.html' %}
+{% block title %}О колледже{% endblock %}
+{% block content %}
+    <div class="about-container">
+        <h1>О колледже</h1>
+        <div class="about-content">
+            <div class="about-text">
+                <p>Колледж телекоммуникаций ордена Трудового Красного Знамени федерального государственного бюджетного образовательного учреждения высшего образования «Московский технический университет связи и информатики» (КТ МТУСИ) — это один из ведущих образовательных учреждений, предоставляющих качественное обучение в области телекоммуникаций, информационных технологий и связи.</p>
 
-<header>
-    <nav>
-        <a href="{% url 'raspisanie:index' %}">Главная</a>
-        <a href="{% url 'raspisanie:about' %}" class="active">О колледже</a>
-        <a href="{% url 'raspisanie:main' %}">Расписание</a>
-        <a href="{% url 'raspisanie:contacts' %}">Контакты</a>
-    </nav>
-    {% if not request.user.is_authenticated %}
-        <a href="{% url 'raspisanie:login' %}" class="login-btn-fixed">Войти</a>
-    {% endif %}
-</header>
+                <p>На протяжении более 100 лет колледж успешно готовит высококвалифицированных специалистов, востребованных на современном рынке труда. Обучение проводится на базе 9 и 11 классов с использованием передовых технологий и методик преподавания.</p>
 
-<div class="main">
-    <aside>
-        <div class="calendar-container">
-            <table class="calendar"><tbody></tbody></table>
-        </div>
-        <div class="contacts">
-            <h2>Контакты</h2>
-            <p><strong>Директорат:</strong><br>+7 (495) 452-18-11</p>
-            <p><strong>Приемная комиссия:</strong><br>+7 (499) 457-55-34</p>
-            <p><strong>Email:</strong><br>ctmtuci@mtuci.ru</p>
-        </div>
-    </aside>
-    
-    <div class="content">
-        <div class="welcome-image">
-            <img src="{% static 'img/log.png' %}" alt="Логотип колледжа">
-        </div>
-        <div class="main-text">
-            <h1 style="text-align: center; color: #3f0ea5; margin-bottom: 30px;">О колледже</h1>
-            <p>Добро пожаловать в наш колледж! Мы гордимся нашими традициями и высокими стандартами образования.
-            Наша миссия — подготовить квалифицированных специалистов, готовых к современным вызовам.</p>
+                <p>Мы гордимся своими традициями, преподавательским составом и выпускниками, которые добиваются успехов в крупнейших компаниях отрасли.</p>
 
-            <p>Наш колледж предлагает обучение по востребованным специальностям на базе 9 и 11 классов.
-            Студенты получают не только теоретические знания, но и практические навыки, необходимые для успешной карьеры.</p>
-
-            <p>Преподаватели колледжа — это высококвалифицированные специалисты с многолетним опытом работы в своих отраслях.
-            Мы создаем комфортные условия для учебы, развития и личностного роста наших студентов.</p>
-
-            <p>Присоединяйтесь к нашей дружной семье — выберите успешное будущее вместе с нами!</p>
+                <p>Присоединяйтесь к нам и станьте частью профессионального сообщества, которое формирует будущее телекоммуникационной отрасли России!</p>
+            </div>
         </div>
     </div>
-</div>
-
-<footer style="margin-top: 40px; text-align: center; padding: 20px; background: #f5f5f5; border-top: 1px solid #ddd;">
-    © 2025 Колледж телекоммуникаций МТУСИ. Все права защищены.
-</footer>
-
-<script src="{% static 'js/calendar.js' %}"></script>
-
-<style>
-.login-btn-fixed {
-    position: fixed;
-    top: 18px;
-    right: 32px;
-    z-index: 1000;
-    background: #3f0ea5;
-    color: #fff;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    text-decoration: none;
-    box-shadow: 0 2px 8px rgba(63,14,165,0.08);
-    transition: background 0.2s;
-}
-.login-btn-fixed:hover {
-    background: #5931c5;
-}
-</style>
-
-</body>
-</html>
+{% endblock %}

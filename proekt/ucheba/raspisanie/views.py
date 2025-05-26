@@ -13,6 +13,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 from django.db.models.functions import TruncDate
 from django.db.models import Count
+from django.contrib.admin.views.decorators import staff_member_required
 
 def is_admin(user):
     """
@@ -93,12 +94,12 @@ def login_view(request):
             # Перенаправление в зависимости от роли
             if hasattr(user, 'profile'):
                 if user.profile.role == 'admin':
-                    return redirect('admin_panel_home')
+                    return redirect('raspisanie:admin_panel_home')
                 elif user.profile.role == 'teacher':
-                    return redirect('teacher_panel_home')
+                    return redirect('raspisanie:teacher_panel_home')
                 else:
-                    return redirect('index')
-            return redirect('index')
+                    return redirect('raspisanie:index')
+            return redirect('raspisanie:index')
     else:
         form = AuthenticationForm()
     return render(request, 'raspisanie/login.html', {'form': form})
@@ -109,7 +110,7 @@ def logout_view(request):
     Выполняет разлогинивание и перенаправляет на страницу входа.
     """
     logout(request)
-    return redirect('login')
+    return redirect('raspisanie:login')
 
 # --- Панель администратора ---
 @login_required

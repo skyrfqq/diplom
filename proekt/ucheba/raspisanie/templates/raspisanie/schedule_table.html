@@ -1,4 +1,4 @@
-{% extends 'raspisanie/panel_base.html' %}
+{% extends 'raspisanie/base.html' %}
 {% load static get_item %}
 {% block title %}{% if selected_date %}Расписание на {{ selected_date|date:"d.m.Y" }}{% else %}Общее расписание{% endif %}{% endblock %}
 {% block menu %}
@@ -8,70 +8,96 @@
         {% if request.user.profile.role == 'student' %}
             {# Пустое меню для студентов #}
         {% elif request.user.profile.role == 'teacher' %}
-            <a href="{% url 'schedule_table' %}">Общее расписание</a>
-            <a href="{% url 'teacher_panel_home' %}">Панель преподавателя</a>
+            <a href="{% url 'raspisanie:schedule_table' %}">Общее расписание</a>
+            <a href="{% url 'raspisanie:teacher_panel_home' %}">Панель преподавателя</a>
         {% else %}
-            <a href="{% url 'admin_panel_home' %}">Главная</a>
-            <a href="{% url 'user_list' %}">Пользователи</a>
-            <a href="{% url 'group_list' %}">Группы</a>
-            <a href="{% url 'teacher_list' %}">Преподаватели</a>
-            <a href="{% url 'subject_list' %}">Предметы</a>
-            <a href="{% url 'schedule_list' %}">Расписание (CRUD)</a>
-            <a href="{% url 'schedule_table' %}">Общее расписание</a>
-            <a href="{% url 'calendar' %}">Календарь</a>
+            <a href="{% url 'raspisanie:admin_panel_home' %}">Главная</a>
+            <a href="{% url 'raspisanie:user_list' %}">Пользователи</a>
+            <a href="{% url 'raspisanie:group_list' %}">Группы</a>
+            <a href="{% url 'raspisanie:teacher_list' %}">Преподаватели</a>
+            <a href="{% url 'raspisanie:subject_list' %}">Предметы</a>
+            <a href="{% url 'raspisanie:schedule_list' %}">Расписание (CRUD)</a>
+            <a href="{% url 'raspisanie:schedule_table' %}">Общее расписание</a>
+            <a href="{% url 'raspisanie:calendar' %}">Календарь</a>
         {% endif %}
     {% endif %}
 {% endblock %}
 {% block content %}
-<div class="schedule-table-wrapper">
-    {% if selected_date %}
-        <div class="schedule-header">
-            <h2>Расписание на {{ selected_date|date:"d.m.Y" }}</h2>
-            <a href="{% url 'schedule_table' %}" class="btn btn-secondary">Показать всё расписание</a>
+<div class="schedule-container">
+    <h1>Расписание занятий</h1>
+    <div class="schedule-content">
+        <div class="schedule-filters">
+            <form method="get" action="{% url 'raspisanie:schedule_table' %}">
+                <div class="filter-group">
+                    <label for="group">Группа:</label>
+                    <select name="group" id="group">
+                        <option value="">Выберите группу</option>
+                        {% for group in groups %}
+                            <option value="{{ group.id }}" {% if selected_group == group.id %}selected{% endif %}>{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="teacher">Преподаватель:</label>
+                    <select name="teacher" id="teacher">
+                        <option value="">Выберите преподавателя</option>
+                        {% for teacher in teachers %}
+                            <option value="{{ teacher.id }}" {% if selected_teacher == teacher.id %}selected{% endif %}>{{ teacher.user.get_full_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="filter-button">Показать расписание</button>
+            </form>
         </div>
-    {% endif %}
-    
-    <table class="schedule-table">
-        <thead>
-            <tr>
-                <th>День / Время</th>
-                {% if selected_group %}
-                    <th>{{ selected_group.name }}</th>
-                {% else %}
-                    {% for group in groups %}
-                        <th>{{ group.name }}</th>
-                    {% endfor %}
-                {% endif %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for day_code, day_name in days %}
-                {% if not selected_date or day_code == selected_day %}
-                    <tr>
-                        <td colspan="{% if selected_group %}2{% else %}{{ groups|length|add:'1' }}{% endif %}" class="day-name">{{ day_name }}</td>
-                    </tr>
-                    {% for time in pair_times %}
+        
+        {% if schedule %}
+            <div class="schedule-table">
+                <table>
+                    <thead>
                         <tr>
-                            <td>{{ time }}</td>
-                            {% if selected_group %}
-                                <td>{{ schedule_map|get_item:day_code|get_item:time|get_item:selected_group.name|default:'' }}</td>
-                            {% else %}
-                                {% for group in groups %}
-                                    <td>{{ schedule_map|get_item:day_code|get_item:time|get_item:group.name|default:'' }}</td>
-                                {% endfor %}
-                            {% endif %}
+                            <th>Время</th>
+                            <th>Понедельник</th>
+                            <th>Вторник</th>
+                            <th>Среда</th>
+                            <th>Четверг</th>
+                            <th>Пятница</th>
+                            <th>Суббота</th>
                         </tr>
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
+                    </thead>
+                    <tbody>
+                        {% for time_slot in time_slots %}
+                            <tr>
+                                <td>{{ time_slot.start_time }} - {{ time_slot.end_time }}</td>
+                                {% for day in days %}
+                                    <td>
+                                        {% for lesson in schedule %}
+                                            {% if lesson.time_slot == time_slot and lesson.day == day %}
+                                                <div class="lesson">
+                                                    <div class="subject">{{ lesson.subject.name }}</div>
+                                                    <div class="teacher">{{ lesson.teacher.user.get_full_name }}</div>
+                                                    <div class="room">{{ lesson.room.number }}</div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="no-schedule">
+                <p>Расписание не найдено. Пожалуйста, выберите группу или преподавателя.</p>
+            </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_css %}
 <style>
-    .schedule-table-wrapper {
+    .schedule-container {
         margin: 20px;
         overflow-x: auto;
     }

@@ -1,104 +1,22 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Колледж телекоммуникаций МТУСИ - Главная</title>
-    <link rel="stylesheet" href="{% static 'style/style.css' %}">
-    <script src="{% static 'js/calendar.js' %}"></script>
-</head>
-<body>
-
-{% if request.user.is_authenticated %}
-    <a href="{% url 'raspisanie:logout' %}" class="logout-btn-fixed">Выйти</a>
-{% else %}
-    <a href="{% url 'raspisanie:login' %}" class="login-btn-fixed">Войти</a>
-{% endif %}
-
-<header>
-    <nav>
-        <a href="{% url 'raspisanie:index' %}" class="active">Главная</a>
-        <a href="{% url 'raspisanie:about' %}">О колледже</a>
-        <a href="{% url 'raspisanie:main' %}">Расписание</a>
-        <a href="{% url 'raspisanie:contacts' %}">Контакты</a>
-    </nav>
-</header>
-
-<div class="main">
-    <aside>
-        <div class="calendar-container">
-            <table class="calendar"><tbody></tbody></table>
-        </div>
-        <div class="contacts">
-            <h2>Контакты</h2>
-            <p><strong>Директорат:</strong><br>+7 (495) 452-18-11</p>
-            <p><strong>Приемная комиссия:</strong><br>+7 (499) 457-55-34</p>
-            <p><strong>Email:</strong><br>ctmtuci@mtuci.ru</p>
-        </div>
-    </aside>
-
-    <div class="content">
-        <div class="welcome-image">
-            <img src="static/img/logo.png" alt="Логотип колледжа">
-        </div>
-
-        <div class="main-text">
-            <h1>Добро пожаловать в наш колледж!</h1>
-            <p>Колледж телекоммуникаций ордена Трудового Красного Знамени федерального государственного бюджетного образовательного учреждения высшего образования «Московский технический университет связи и информатики» (КТ МТУСИ) — это один из ведущих образовательных учреждений, предоставляющих качественное обучение в области телекоммуникаций, информационных технологий и связи.</p>
-
-            <p>На протяжении более 100 лет колледж успешно готовит высококвалифицированных специалистов, востребованных на современном рынке труда. Обучение проводится на базе 9 и 11 классов с использованием передовых технологий и методик преподавания.</p>
-
-            <p>Мы гордимся своими традициями, преподавательским составом и выпускниками, которые добиваются успехов в крупнейших компаниях отрасли.</p>
-
-            <p>Присоединяйтесь к нам и станьте частью профессионального сообщества, которое формирует будущее телекоммуникационной отрасли России!</p>
+{% extends 'raspisanie/base.html' %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+    <div class="main-container">
+        <h1>Добро пожаловать в систему расписания колледжа</h1>
+        <div class="main-buttons">
+            <a href="{% url 'raspisanie:schedule_table' %}" class="main-button">Расписание</a>
+            <a href="{% url 'raspisanie:contacts' %}" class="main-button">Контакты</a>
+            {% if user.is_authenticated %}
+                {% if user.is_staff %}
+                    <a href="{% url 'raspisanie:admin_panel_home' %}" class="main-button">Панель администратора</a>
+                {% elif user.teacher %}
+                    <a href="{% url 'raspisanie:teacher_panel_home' %}" class="main-button">Панель преподавателя</a>
+                {% endif %}
+                <a href="{% url 'raspisanie:logout' %}" class="main-button">Выйти</a>
+            {% else %}
+                <a href="{% url 'raspisanie:login' %}" class="main-button">Войти</a>
+                <a href="{% url 'raspisanie:signup' %}" class="main-button">Регистрация</a>
+            {% endif %}
         </div>
     </div>
-</div>
-
-<footer style="margin-top: 40px; text-align: center; padding: 20px; background: #f5f5f5; border-top: 1px solid #ddd;">
-    © 2025 Колледж телекоммуникаций МТУСИ. Все права защищены.
-</footer>
-
-<style>
-.logout-btn-fixed {
-    position: fixed;
-    top: 18px;
-    right: 32px;
-    z-index: 1000;
-    background: #3f0ea5;
-    color: #fff;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    text-decoration: none;
-    box-shadow: 0 2px 8px rgba(63,14,165,0.08);
-    transition: background 0.2s;
-}
-.logout-btn-fixed:hover {
-    background: #5931c5;
-}
-.login-btn-fixed {
-    position: fixed;
-    top: 18px;
-    right: 32px;
-    z-index: 1000;
-    background: #3f0ea5;
-    color: #fff;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    text-decoration: none;
-    box-shadow: 0 2px 8px rgba(63,14,165,0.08);
-    transition: background 0.2s;
-}
-.login-btn-fixed:hover {
-    background: #5931c5;
-}
-</style>
-
-</body>
-</html>
+{% endblock %}

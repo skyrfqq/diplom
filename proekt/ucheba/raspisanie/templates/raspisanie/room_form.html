@@ -1,5 +1,5 @@
 {% extends 'raspisanie/panel_base.html' %}
-{% block title %}Удалить пользователя{% endblock %}
+{% block title %}{% if room %}Редактировать аудиторию{% else %}Создать аудиторию{% endif %}{% endblock %}
 {% block menu %}
     <a href="{% url 'raspisanie:admin_panel_home' %}">Главная</a>
     <a href="{% url 'raspisanie:user_list' %}">Пользователи</a>
@@ -10,15 +10,15 @@
     <a href="{% url 'raspisanie:schedule_list' %}">Расписание</a>
 {% endblock %}
 {% block content %}
-    <div class="delete-container">
-        <h1>Удалить пользователя</h1>
-        <div class="delete-content">
-            <p>Вы уверены, что хотите удалить пользователя "{{ user.get_full_name|default:user.username }}"?</p>
+    <div class="form-container">
+        <h1>{% if room %}Редактировать аудиторию{% else %}Создать аудиторию{% endif %}</h1>
+        <div class="form-content">
             <form method="post">
                 {% csrf_token %}
-                <div class="delete-buttons">
-                    <button type="submit" class="delete-button">Удалить</button>
-                    <a href="{% url 'raspisanie:user_list' %}" class="cancel-button">Отмена</a>
+                {{ form.as_p }}
+                <div class="form-buttons">
+                    <button type="submit" class="submit-button">Сохранить</button>
+                    <a href="{% url 'raspisanie:room_list' %}" class="cancel-button">Отмена</a>
                 </div>
             </form>
         </div>
