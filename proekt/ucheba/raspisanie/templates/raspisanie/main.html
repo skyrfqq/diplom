@@ -11,13 +11,13 @@
 
 <header>
     <nav>
-        <a href="{% url 'index' %}">Главная</a>
-        <a href="{% url 'about' %}">О колледже</a>
-        <a href="{% url 'main' %}" class="active">Расписание</a>
-        <a href="{% url 'contacts' %}">Контакты</a>
+        <a href="{% url 'raspisanie:index' %}">Главная</a>
+        <a href="{% url 'raspisanie:about' %}">О колледже</a>
+        <a href="{% url 'raspisanie:main' %}" class="active">Расписание</a>
+        <a href="{% url 'raspisanie:contacts' %}">Контакты</a>
     </nav>
     {% if not request.user.is_authenticated %}
-        <a href="{% url 'login' %}" class="login-btn-fixed">Войти</a>
+        <a href="{% url 'raspisanie:login' %}" class="login-btn-fixed">Войти</a>
     {% endif %}
 </header>
 
