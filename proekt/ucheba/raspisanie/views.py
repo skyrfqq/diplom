@@ -61,12 +61,10 @@ def signup(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
-            user.save()
-            Profile.objects.create(user=user, role=form.cleaned_data['role'])
-            messages.success(request, 'Регистрация прошла успешно! Теперь войдите.')
-            return redirect('login')
+            user = form.save()
+            profile = Profile.objects.create(user=user, role=form.cleaned_data['role'])
+            login(request, user)
+            return redirect('raspisanie:login')
     else:
         form = UserRegisterForm()
     return render(request, 'raspisanie/signup.html', {'form': form})
