@@ -1,34 +1,30 @@
 {% extends 'raspisanie/panel_base.html' %}
 {% block title %}Кабинеты{% endblock %}
 {% block menu %}
-    <a href="{% url 'raspisanie:admin_panel_home' %}">Главная</a>
-    <a href="{% url 'raspisanie:user_list' %}">Пользователи</a>
-    <a href="{% url 'raspisanie:group_list' %}">Группы</a>
-    <a href="{% url 'raspisanie:teacher_list' %}">Преподаватели</a>
-    <a href="{% url 'raspisanie:room_list' %}">Кабинеты</a>
-    <a href="{% url 'raspisanie:subject_list' %}">Предметы</a>
-    <a href="{% url 'raspisanie:schedule_list' %}">Расписание</a>
+    <a href="{% url 'admin_panel_home' %}">Главная</a>
+    <a href="{% url 'user_list' %}">Пользователи</a>
+    <a href="{% url 'group_list' %}">Группы</a>
+    <a href="{% url 'teacher_list' %}">Преподаватели</a>
+    <a href="{% url 'room_list' %}">Кабинеты</a>
+    <a href="{% url 'subject_list' %}">Предметы</a>
+    <a href="{% url 'schedule_list' %}">Расписание</a>
 {% endblock %}
 {% block content %}
     <h2>Кабинеты</h2>
-    <a href="{% url 'raspisanie:room_create' %}" style="margin-bottom: 20px; display: inline-block; background: #3f0ea5; color: #fff; padding: 8px 18px; border-radius: 8px; text-decoration: none;">Добавить кабинет</a>
+    <a href="{% url 'room_create' %}" style="margin-bottom: 20px; display: inline-block; background: #3f0ea5; color: #fff; padding: 8px 18px; border-radius: 8px; text-decoration: none;">Добавить кабинет</a>
     <table style="width:100%; border-collapse: collapse;">
         <tr>
-            <th>Название</th>
-            <th>Вместимость</th>
+            <th>Номер кабинета</th>
             <th>Действия</th>
         </tr>
         {% for room in rooms %}
         <tr>
-            <td>{{ room.name }}</td>
-            <td>{{ room.capacity }}</td>
+            <td>{{ room.number }}</td>
             <td>
-                <a href="{% url 'raspisanie:room_update' room.pk %}">Редактировать</a>
-                <a href="{% url 'raspisanie:room_delete' room.pk %}" style="margin-left:10px; color: #dc3545;">Удалить</a>
+                <a href="{% url 'room_update' room.pk %}">Редактировать</a> |
+                <a href="{% url 'room_delete' room.pk %}">Удалить</a>
             </td>
         </tr>
-        {% empty %}
-        <tr><td colspan="3">Нет доступных кабинетов</td></tr>
         {% endfor %}
     </table>
 {% endblock %} 

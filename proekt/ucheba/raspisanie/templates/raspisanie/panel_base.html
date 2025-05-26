@@ -3,9 +3,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Панель управления{% endblock %} - Колледж КТ МТУСИ</title>
+    <title>{% block title %}Панель управления{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'style/style.css' %}">
-    <link rel="stylesheet" href="{% static 'style/panel.css' %}">
     <style>
         body {
             background: #f8f8fb;
@@ -77,40 +76,34 @@
         }
     </style>
 </head>
-<body class="panel-page">
-    <header class="panel-header">
-        <div class="panel-header-left">
-            <a href="{% url 'raspisanie:index' %}" class="panel-logo">КТ МТУСИ</a>
-        </div>
-        <div class="panel-header-right">
-            {% if user.is_authenticated %}
-                <span class="panel-user">{{ user.username }}</span>
-                <a href="{% url 'raspisanie:logout' %}" class="panel-logout">Выйти</a>
+<body>
+    <div class="panel-header">
+        <div class="profile">
+            {% if request.user.is_authenticated %}
+                {{ request.user.username }}
+                {% if request.user.profile %}
+                    ({{ request.user.profile.get_role_display }})
+                {% endif %}
             {% endif %}
         </div>
-    </header>
-
-    <div class="panel-container">
-        <aside class="panel-sidebar">
-            <nav class="panel-nav">
-                {% block menu %}
-                <a href="{% url 'raspisanie:admin_panel_home' %}">Главная</a>
-                <a href="{% url 'raspisanie:user_list' %}">Пользователи</a>
-                <a href="{% url 'raspisanie:group_list' %}">Группы</a>
-                <a href="{% url 'raspisanie:teacher_list' %}">Преподаватели</a>
-                <a href="{% url 'raspisanie:subject_list' %}">Предметы</a>
-                <a href="{% url 'raspisanie:schedule_list' %}">Расписание</a>
-                {% endblock %}
-            </nav>
-        </aside>
-
-        <main class="panel-content">
-            {% block content %}{% endblock %}
-        </main>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="logout-btn">Выйти</a>
+        {% endif %}
     </div>
-
-    <footer class="panel-footer">
-        © 2025 Колледж телекоммуникаций МТУСИ. Все права защищены.
-    </footer>
+    <div class="panel-menu">
+        {% block menu %}
+            {% if request.user.is_authenticated and request.user.profile and request.user.profile.role == 'teacher' %}
+                <a href="{% url 'schedule_table' %}">Общее расписание</a>
+                <a href="{% url 'calendar' %}">Календарь</a>
+            {% else %}
+                <a href="{% url 'schedule_list' %}">Расписание (CRUD)</a>
+                <a href="{% url 'schedule_table' %}">Общее расписание</a>
+                <a href="{% url 'calendar' %}">Календарь</a>
+            {% endif %}
+        {% endblock %}
+    </div>
+    <div class="panel-content">
+        {% block content %}{% endblock %}
+    </div>
 </body>
 </html> 

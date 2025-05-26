@@ -1,19 +1,100 @@
-{% extends 'raspisanie/base.html' %}
-{% block title %}Контакты{% endblock %}
-{% block content %}
-    <div class="contacts-container">
-        <h1>Контакты</h1>
-        <div class="contacts-content">
-            <div class="contact-info">
-                <h2>Контактная информация</h2>
-                <p><strong>Адрес:</strong><br>123423, г. Москва, ул. Авиаторов, д. 8</p>
-                <p><strong>Директорат:</strong><br>+7 (495) 452-18-11</p>
-                <p><strong>Приемная комиссия:</strong><br>+7 (499) 457-55-34</p>
-                <p><strong>Email:</strong><br>ctmtuci@mtuci.ru</p>
-            </div>
-            <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.1234567890123!2d37.12345678901234!3d55.12345678901234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTXCsDA3JzI0LjQiTiAzN8KwMDcnMjQuNCJF!5e0!3m2!1sru!2sru!4v1234567890123!5m2!1sru!2sru" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-            </div>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Контакты - Колледж КТ МТУСИ</title>
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+    <script src="js/calendar.js"></script>
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="{% url 'index' %}">Главная</a>
+        <a href="{% url 'about' %}">О колледже</a>
+        <a href="{% url 'main' %}">Расписание</a>
+        <a href="{% url 'contacts' %}" class="active">Контакты</a>
+    </nav>
+</header>
+
+{% if not request.user.is_authenticated %}
+    <a href="{% url 'login' %}" class="login-btn-fixed">Войти</a>
+{% endif %}
+
+<div class="main">
+    <aside>
+        <div class="calendar-container">
+            <table class="calendar"><tbody></tbody></table>
+        </div>
+        <div class="contacts">
+            <h2>Контакты</h2>
+            <p><strong>Директорат:</strong><br>+7 (495) 452-18-11</p>
+            <p><strong>Приемная комиссия:</strong><br>+7 (499) 457-55-34</p>
+            <p><strong>Email:</strong><br>ctmtuci@mtuci.ru</p>
+        </div>
+    </aside>
+
+    <div class="content">
+        <div class="main-text">
+            <h1 style="text-align: center; color: #3f0ea5; margin-bottom: 30px;">Контактная информация</h1>
+
+            <p><strong>Адрес колледжа:</strong><br>Москва, улица Академика Кржижановского, дом 14, корпус 1</p>
+
+            <p><strong>Телефоны:</strong><br>
+            Директорат: +7 (495) 452-18-11<br>
+            Приемная комиссия: +7 (499) 457-55-34<br>
+            Бухгалтерия: +7 (499) 458-91-96<br>
+            Методический отдел: +7 (499) 458-91-13</p>
+
+            <p><strong>Электронная почта:</strong><br>
+            Директорат: ctmtuci@mtuci.ru<br>
+            Приемная комиссия: pk_kt@mtuci.ru<br>
+            Бухгалтерия: buh-kt@mtuci.ru</p>
+
+            <p><strong>График работы колледжа:</strong><br>
+            Понедельник - Пятница: 09:00 – 18:00<br>
+            Суббота: 09:00 – 14:00<br>
+            Воскресенье: выходной</p>
+
+            <p><strong>Личный приём директора:</strong><br> Четверг с 10:00 до 12:00 (по предварительной записи)</p>
+
+            <p style="text-align: center; margin-top: 40px;">
+                <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Axxxxxxxxxxxxxxxxxxxx&amp;source=constructor" 
+                width="100%" height="400" frameborder="0"></iframe>
+            </p>
+            
         </div>
     </div>
-{% endblock %}
+</div>
+
+<footer style="margin-top: 40px; text-align: center; padding: 20px; background: #f5f5f5; border-top: 1px solid #ddd;">
+    © 2025 Колледж телекоммуникаций МТУСИ. Все права защищены.
+</footer>
+
+<script src="{% static 'js/calendar.js' %}"></script>
+
+<style>
+.login-btn-fixed {
+    position: fixed;
+    top: 18px;
+    right: 32px;
+    z-index: 1000;
+    background: #3f0ea5;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(63,14,165,0.08);
+    transition: background 0.2s;
+}
+.login-btn-fixed:hover {
+    background: #5931c5;
+}
+</style>
+
+</body>
+</html>

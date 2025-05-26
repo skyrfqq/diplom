@@ -3,17 +3,17 @@
 {% block title %}Календарь{% endblock %}
 {% block menu %}
     {% if request.user.is_authenticated and request.user.profile and request.user.profile.role == 'teacher' %}
-        <a href="{% url 'raspisanie:schedule_table' %}">Общее расписание</a>
-        <a href="{% url 'raspisanie:teacher_panel_home' %}">Панель преподавателя</a>
+        <a href="{% url 'schedule_table' %}">Общее расписание</a>
+        <a href="{% url 'teacher_panel_home' %}">Панель преподавателя</a>
     {% else %}
-        <a href="{% url 'raspisanie:admin_panel_home' %}">Главная</a>
-        <a href="{% url 'raspisanie:user_list' %}">Пользователи</a>
-        <a href="{% url 'raspisanie:group_list' %}">Группы</a>
-        <a href="{% url 'raspisanie:teacher_list' %}">Преподаватели</a>
-        <a href="{% url 'raspisanie:subject_list' %}">Предметы</a>
-        <a href="{% url 'raspisanie:schedule_list' %}">Расписание (CRUD)</a>
-        <a href="{% url 'raspisanie:schedule_table' %}">Общее расписание</a>
-        <a href="{% url 'raspisanie:calendar' %}">Календарь</a>
+        <a href="{% url 'admin_panel_home' %}">Главная</a>
+        <a href="{% url 'user_list' %}">Пользователи</a>
+        <a href="{% url 'group_list' %}">Группы</a>
+        <a href="{% url 'teacher_list' %}">Преподаватели</a>
+        <a href="{% url 'subject_list' %}">Предметы</a>
+        <a href="{% url 'schedule_list' %}">Расписание (CRUD)</a>
+        <a href="{% url 'schedule_table' %}">Общее расписание</a>
+        <a href="{% url 'calendar' %}">Календарь</a>
     {% endif %}
 {% endblock %}
 {% block content %}

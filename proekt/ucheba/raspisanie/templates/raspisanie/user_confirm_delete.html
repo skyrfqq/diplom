@@ -1,26 +1,20 @@
 {% extends 'raspisanie/panel_base.html' %}
 {% block title %}Удалить пользователя{% endblock %}
 {% block menu %}
-    <a href="{% url 'raspisanie:admin_panel_home' %}">Главная</a>
-    <a href="{% url 'raspisanie:user_list' %}">Пользователи</a>
-    <a href="{% url 'raspisanie:group_list' %}">Группы</a>
-    <a href="{% url 'raspisanie:teacher_list' %}">Преподаватели</a>
-    <a href="{% url 'raspisanie:room_list' %}">Кабинеты</a>
-    <a href="{% url 'raspisanie:subject_list' %}">Предметы</a>
-    <a href="{% url 'raspisanie:schedule_list' %}">Расписание</a>
+    <a href="{% url 'admin_panel_home' %}">Главная</a>
+    <a href="{% url 'user_list' %}">Пользователи</a>
+    <a href="{% url 'group_list' %}">Группы</a>
+    <a href="{% url 'teacher_list' %}">Преподаватели</a>
+    <a href="{% url 'room_list' %}">Кабинеты</a>
+    <a href="{% url 'subject_list' %}">Предметы</a>
+    <a href="{% url 'schedule_list' %}">Расписание</a>
 {% endblock %}
 {% block content %}
-    <div class="delete-container">
-        <h1>Удалить пользователя</h1>
-        <div class="delete-content">
-            <p>Вы уверены, что хотите удалить пользователя "{{ user.get_full_name|default:user.username }}"?</p>
-            <form method="post">
-                {% csrf_token %}
-                <div class="delete-buttons">
-                    <button type="submit" class="delete-button">Удалить</button>
-                    <a href="{% url 'raspisanie:user_list' %}" class="cancel-button">Отмена</a>
-                </div>
-            </form>
-        </div>
-    </div>
+    <h2>Удалить пользователя</h2>
+    <p>Вы уверены, что хотите удалить пользователя <b>{{ user_obj.username }}</b>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" style="background:#c00; color:#fff; padding:8px 18px; border-radius:8px;">Удалить</button>
+        <a href="{% url 'user_list' %}" style="margin-left:20px;">Отмена</a>
+    </form>
 {% endblock %} 

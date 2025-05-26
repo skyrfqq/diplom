@@ -1,74 +1,94 @@
-{% extends 'raspisanie/base.html' %}
-{% block title %}Расписание{% endblock %}
-{% block content %}
-    <div class="schedule-container">
-        <h1>Расписание занятий</h1>
-        <div class="schedule-content">
-            <div class="schedule-filters">
-                <form method="get" action="{% url 'raspisanie:main' %}">
-                    <div class="filter-group">
-                        <label for="group">Группа:</label>
-                        <select name="group" id="group">
-                            <option value="">Выберите группу</option>
-                            {% for group in groups %}
-                                <option value="{{ group.id }}" {% if selected_group == group.id %}selected{% endif %}>{{ group.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="teacher">Преподаватель:</label>
-                        <select name="teacher" id="teacher">
-                            <option value="">Выберите преподавателя</option>
-                            {% for teacher in teachers %}
-                                <option value="{{ teacher.id }}" {% if selected_teacher == teacher.id %}selected{% endif %}>{{ teacher.user.get_full_name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <button type="submit" class="filter-button">Показать расписание</button>
-                </form>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Расписание - Колледж КТ МТУСИ</title>
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+    <script src="js/calendar.js"></script>
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="{% url 'index' %}">Главная</a>
+        <a href="{% url 'about' %}">О колледже</a>
+        <a href="{% url 'main' %}" class="active">Расписание</a>
+        <a href="{% url 'contacts' %}">Контакты</a>
+    </nav>
+    {% if not request.user.is_authenticated %}
+        <a href="{% url 'login' %}" class="login-btn-fixed">Войти</a>
+    {% endif %}
+</header>
+
+<div class="main">
+    <aside>
+        <div class="calendar-container">
+            <table class="calendar"><tbody></tbody></table>
+        </div>
+        <div class="contacts">
+            <h2>Контакты</h2>
+            <p><strong>Директорат:</strong><br>+7 (495) 452-18-11</p>
+            <p><strong>Приемная комиссия:</strong><br>+7 (499) 457-55-34</p>
+            <p><strong>Email:</strong><br>ctmtuci@mtuci.ru</p>
+        </div>
+    </aside>
+
+    <div class="content">
+        <div class="groups-container">
+            <div class="groups-block">
+                <div class="groups-title">На базе 9 классов</div>
+                <div class="groups-list">
+                    <a href="{% url 'group_week_schedule' %}?group=ИСП9-124А">ИСП9-124А</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ИСП9-124Б">ИСП9-124Б</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ОИБ9-124Б">ОИБ9-124Б</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ОИБ9-124П">ОИБ9-124П</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ССА9-124А">ССА9-124А</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ССА9-124Б">ССА9-124Б</a>
+                </div>
             </div>
-            
-            {% if schedule %}
-                <div class="schedule-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Время</th>
-                                <th>Понедельник</th>
-                                <th>Вторник</th>
-                                <th>Среда</th>
-                                <th>Четверг</th>
-                                <th>Пятница</th>
-                                <th>Суббота</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for time_slot in time_slots %}
-                                <tr>
-                                    <td>{{ time_slot.start_time }} - {{ time_slot.end_time }}</td>
-                                    {% for day in days %}
-                                        <td>
-                                            {% for lesson in schedule %}
-                                                {% if lesson.time_slot == time_slot and lesson.day == day %}
-                                                    <div class="lesson">
-                                                        <div class="subject">{{ lesson.subject.name }}</div>
-                                                        <div class="teacher">{{ lesson.teacher.user.get_full_name }}</div>
-                                                        <div class="room">{{ lesson.room.number }}</div>
-                                                    </div>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+            <div class="groups-block">
+                <div class="groups-title">На базе 11 классов</div>
+                <div class="groups-list">
+                    <a href="{% url 'group_week_schedule' %}?group=ИСП11-322АП">ИСП11-322АП</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ИСП11-322БП">ИСП11-322БП</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ССА11-322П">ССА11-322П</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ССА11-223П">ССА11-223П</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ИСП11-124БП">ИСП11-124БП</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ОИБ11-124П">ОИБ11-124П</a>
                 </div>
-            {% else %}
-                <div class="no-schedule">
-                    <p>Расписание не найдено. Пожалуйста, выберите группу или преподавателя.</p>
-                </div>
-            {% endif %}
+            </div>
         </div>
     </div>
-{% endblock %}
+</div>
+
+<footer style="margin-top: 40px; text-align: center; padding: 20px; background: #f5f5f5; border-top: 1px solid #ddd;">
+    © 2025 Колледж телекоммуникаций МТУСИ. Все права защищены.
+</footer>
+
+<script src="{% static 'js/calendar.js' %}"></script>
+
+<style>
+.login-btn-fixed {
+    position: fixed;
+    top: 18px;
+    right: 32px;
+    z-index: 1000;
+    background: #3f0ea5;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(63,14,165,0.08);
+    transition: background 0.2s;
+}
+.login-btn-fixed:hover {
+    background: #5931c5;
+}
+</style>
+
+</body>
+</html>

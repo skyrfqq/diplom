@@ -1,53 +1,32 @@
 {% extends 'raspisanie/panel_base.html' %}
 {% block title %}Предметы{% endblock %}
 {% block menu %}
-    <a href="{% url 'raspisanie:admin_panel_home' %}">Главная</a>
-    <a href="{% url 'raspisanie:user_list' %}">Пользователи</a>
-    <a href="{% url 'raspisanie:group_list' %}">Группы</a>
-    <a href="{% url 'raspisanie:teacher_list' %}">Преподаватели</a>
-    <a href="{% url 'raspisanie:room_list' %}">Кабинеты</a>
-    <a href="{% url 'raspisanie:subject_list' %}">Предметы</a>
-    <a href="{% url 'raspisanie:schedule_list' %}">Расписание</a>
+    <a href="{% url 'admin_panel_home' %}">Главная</a>
+    <a href="{% url 'user_list' %}">Пользователи</a>
+    <a href="{% url 'group_list' %}">Группы</a>
+    <a href="{% url 'teacher_list' %}">Преподаватели</a>
+    <a href="{% url 'subject_list' %}">Предметы</a>
+    <a href="{% url 'schedule_list' %}">Расписание</a>
 {% endblock %}
 {% block content %}
-    <div class="subjects-container">
-        <h1>Предметы</h1>
-        <div class="subjects-content">
-            <div class="subjects-header">
-                <a href="{% url 'raspisanie:subject_create' %}" class="add-button">Добавить предмет</a>
-            </div>
-            {% if subjects %}
-                <div class="subjects-list">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Название</th>
-                                <th>Преподаватель</th>
-                                <th>Количество групп</th>
-                                <th>Действия</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for subject in subjects %}
-                                <tr>
-                                    <td>{{ subject.name }}</td>
-                                    <td>{{ subject.teacher.user.get_full_name }}</td>
-                                    <td>{{ subject.groups.count }}</td>
-                                    <td>
-                                        <a href="{% url 'raspisanie:subject_update' subject.id %}" class="action-button">Редактировать</a>
-                                        <a href="{% url 'raspisanie:subject_delete' subject.id %}" class="action-button delete">Удалить</a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <div class="no-subjects">
-                    <p>Предметы не найдены.</p>
-                </div>
-            {% endif %}
-        </div>
+    <h2>Предметы</h2>
+    <a href="{% url 'subject_create' %}" style="margin-bottom: 20px; display: inline-block; background: #3f0ea5; color: #fff; padding: 8px 18px; border-radius: 8px; text-decoration: none;">Добавить предмет</a>
+    <div style="overflow-x:auto; margin-top: 18px;">
+    <table class="styled-table">
+        <tr>
+            <th>Название предмета</th>
+            <th>Действия</th>
+        </tr>
+        {% for subject in subjects %}
+        <tr>
+            <td>{{ subject.name }}</td>
+            <td>
+                <a href="{% url 'subject_update' subject.pk %}">Редактировать</a> |
+                <a href="{% url 'subject_delete' subject.pk %}">Удалить</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
     </div>
     <style>
     .styled-table {

@@ -1,26 +1,36 @@
 {% extends 'raspisanie/panel_base.html' %}
-{% block title %}{% if user %}Редактировать пользователя{% else %}Создать пользователя{% endif %}{% endblock %}
+{% block title %}{{ user_obj|default_if_none:"Создать пользователя" }}{% endblock %}
 {% block menu %}
-    <a href="{% url 'raspisanie:admin_panel_home' %}">Главная</a>
-    <a href="{% url 'raspisanie:user_list' %}">Пользователи</a>
-    <a href="{% url 'raspisanie:group_list' %}">Группы</a>
-    <a href="{% url 'raspisanie:teacher_list' %}">Преподаватели</a>
-    <a href="{% url 'raspisanie:room_list' %}">Кабинеты</a>
-    <a href="{% url 'raspisanie:subject_list' %}">Предметы</a>
-    <a href="{% url 'raspisanie:schedule_list' %}">Расписание</a>
+    <a href="{% url 'admin_panel_home' %}">Главная</a>
+    <a href="{% url 'user_list' %}">Пользователи</a>
+    <a href="{% url 'group_list' %}">Группы</a>
+    <a href="{% url 'teacher_list' %}">Преподаватели</a>
+    <a href="{% url 'room_list' %}">Кабинеты</a>
+    <a href="{% url 'subject_list' %}">Предметы</a>
+    <a href="{% url 'schedule_list' %}">Расписание</a>
 {% endblock %}
 {% block content %}
-    <div class="form-container">
-        <h1>{% if user %}Редактировать пользователя{% else %}Создать пользователя{% endif %}</h1>
-        <div class="form-content">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div class="form-buttons">
-                    <button type="submit" class="submit-button">Сохранить</button>
-                    <a href="{% url 'raspisanie:user_list' %}" class="cancel-button">Отмена</a>
-                </div>
-            </form>
-        </div>
-    </div>
+    <h2>{% if user_obj %}Редактировать пользователя{% else %}Создать пользователя{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>Имя пользователя:<br>
+            <input type="text" name="username" value="{{ user_obj.username|default:'' }}" required>
+        </label><br><br>
+        <label>Email:<br>
+            <input type="email" name="email" value="{{ user_obj.email|default:'' }}">
+        </label><br><br>
+        <label>Пароль:<br>
+            <input type="password" name="password" {% if not user_obj %}required{% endif %}>
+            {% if user_obj %}<small>Оставьте пустым, чтобы не менять пароль</small>{% endif %}
+        </label><br><br>
+        <label>Роль:<br>
+            <select name="role" required>
+                <option value="student" {% if profile and profile.role == 'student' %}selected{% endif %}>Студент</option>
+                <option value="teacher" {% if profile and profile.role == 'teacher' %}selected{% endif %}>Преподаватель</option>
+                <option value="admin" {% if profile and profile.role == 'admin' %}selected{% endif %}>Администратор</option>
+            </select>
+        </label><br><br>
+        <button type="submit" style="background:#3f0ea5; color:#fff; padding:8px 18px; border-radius:8px;">Сохранить</button>
+        <a href="{% url 'user_list' %}" style="margin-left:20px;">Отмена</a>
+    </form>
 {% endblock %} 

@@ -13,7 +13,6 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 from django.db.models.functions import TruncDate
 from django.db.models import Count
-from django.contrib.admin.views.decorators import staff_member_required
 
 def is_admin(user):
     """
@@ -62,10 +61,12 @@ def signup(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            profile = Profile.objects.create(user=user, role=form.cleaned_data['role'])
-            login(request, user)
-            return redirect('raspisanie:login')
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            Profile.objects.create(user=user, role=form.cleaned_data['role'])
+            messages.success(request, 'Регистрация прошла успешно! Теперь войдите.')
+            return redirect('login')
     else:
         form = UserRegisterForm()
     return render(request, 'raspisanie/signup.html', {'form': form})
@@ -94,12 +95,12 @@ def login_view(request):
             # Перенаправление в зависимости от роли
             if hasattr(user, 'profile'):
                 if user.profile.role == 'admin':
-                    return redirect('raspisanie:admin_panel_home')
+                    return redirect('admin_panel_home')
                 elif user.profile.role == 'teacher':
-                    return redirect('raspisanie:teacher_panel_home')
+                    return redirect('teacher_panel_home')
                 else:
-                    return redirect('raspisanie:index')
-            return redirect('raspisanie:index')
+                    return redirect('index')
+            return redirect('index')
     else:
         form = AuthenticationForm()
     return render(request, 'raspisanie/login.html', {'form': form})
@@ -110,7 +111,7 @@ def logout_view(request):
     Выполняет разлогинивание и перенаправляет на страницу входа.
     """
     logout(request)
-    return redirect('raspisanie:login')
+    return redirect('login')
 
 # --- Панель администратора ---
 @login_required

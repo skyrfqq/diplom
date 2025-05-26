@@ -1,8 +1,6 @@
 from django.urls import path
 from . import views
 
-app_name = 'raspisanie'
-
 urlpatterns = [
     # Основные страницы сайта
     path('', views.index, name='index'),  # Главная страница
@@ -17,8 +15,8 @@ urlpatterns = [
 
     # Панели управления
     path('panel/', views.panel_home, name='panel_home'),  # Главная страница панели управления
-    path('admin/', views.admin_panel_home, name='admin_panel_home'),  # Панель администратора
-    path('teacher/', views.teacher_panel_home, name='teacher_panel_home'),  # Панель преподавателя
+    path('admin-panel/', views.admin_panel_home, name='admin_panel_home'),  # Панель администратора
+    path('teacher-panel/', views.teacher_panel_home, name='teacher_panel_home'),  # Панель преподавателя
 
     # CRUD операции для групп
     path('groups/', views.group_list, name='group_list'),  # Список всех групп

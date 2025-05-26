@@ -1,18 +1,18 @@
 {% extends 'raspisanie/panel_base.html' %}
 {% block title %}Студенты группы {{ group.name }}{% endblock %}
 {% block menu %}
-    <a href="{% url 'raspisanie:admin_panel_home' %}">Главная</a>
-    <a href="{% url 'raspisanie:user_list' %}">Пользователи</a>
-    <a href="{% url 'raspisanie:group_list' %}">Группы</a>
-    <a href="{% url 'raspisanie:teacher_list' %}">Преподаватели</a>
-    <a href="{% url 'raspisanie:room_list' %}">Кабинеты</a>
-    <a href="{% url 'raspisanie:subject_list' %}">Предметы</a>
-    <a href="{% url 'raspisanie:schedule_list' %}">Расписание</a>
+    <a href="{% url 'admin_panel_home' %}">Главная</a>
+    <a href="{% url 'user_list' %}">Пользователи</a>
+    <a href="{% url 'group_list' %}">Группы</a>
+    <a href="{% url 'teacher_list' %}">Преподаватели</a>
+    <a href="{% url 'room_list' %}">Кабинеты</a>
+    <a href="{% url 'subject_list' %}">Предметы</a>
+    <a href="{% url 'schedule_list' %}">Расписание</a>
 {% endblock %}
 {% block content %}
     <h2>Студенты группы {{ group.name }}</h2>
-    <a href="{% url 'raspisanie:group_list' %}" style="margin-bottom: 20px; display: inline-block;">Назад к списку групп</a>
-    <a href="{% url 'raspisanie:group_add_students' group.pk %}" style="margin-bottom: 20px; display: inline-block; background: #3f0ea5; color: #fff; padding: 8px 18px; border-radius: 8px; text-decoration: none; margin-left: 20px;">Добавить студентов</a>
+    <a href="{% url 'group_list' %}" style="margin-bottom: 20px; display: inline-block;">Назад к списку групп</a>
+    <a href="{% url 'group_add_students' group.pk %}" style="margin-bottom: 20px; display: inline-block; background: #3f0ea5; color: #fff; padding: 8px 18px; border-radius: 8px; text-decoration: none; margin-left: 20px;">Добавить студентов</a>
     <table style="width:100%; border-collapse: collapse;">
         <tr>
             <th>Имя пользователя</th>

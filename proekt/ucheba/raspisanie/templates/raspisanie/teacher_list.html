@@ -1,17 +1,16 @@
 {% extends 'raspisanie/panel_base.html' %}
 {% block title %}Преподаватели{% endblock %}
 {% block menu %}
-    <a href="{% url 'raspisanie:admin_panel_home' %}">Главная</a>
-    <a href="{% url 'raspisanie:user_list' %}">Пользователи</a>
-    <a href="{% url 'raspisanie:group_list' %}">Группы</a>
-    <a href="{% url 'raspisanie:teacher_list' %}">Преподаватели</a>
-    <a href="{% url 'raspisanie:room_list' %}">Кабинеты</a>
-    <a href="{% url 'raspisanie:subject_list' %}">Предметы</a>
-    <a href="{% url 'raspisanie:schedule_list' %}">Расписание</a>
+    <a href="{% url 'admin_panel_home' %}">Главная</a>
+    <a href="{% url 'user_list' %}">Пользователи</a>
+    <a href="{% url 'group_list' %}">Группы</a>
+    <a href="{% url 'teacher_list' %}">Преподаватели</a>
+    <a href="{% url 'subject_list' %}">Предметы</a>
+    <a href="{% url 'schedule_list' %}">Расписание</a>
 {% endblock %}
 {% block content %}
     <h2>Преподаватели</h2>
-    <a href="{% url 'raspisanie:teacher_create' %}" style="margin-bottom: 20px; display: inline-block; background: #3f0ea5; color: #fff; padding: 8px 18px; border-radius: 8px; text-decoration: none;">Добавить преподавателя</a>
+    <a href="{% url 'teacher_create' %}" style="margin-bottom: 20px; display: inline-block; background: #3f0ea5; color: #fff; padding: 8px 18px; border-radius: 8px; text-decoration: none;">Добавить преподавателя</a>
     <div style="overflow-x:auto; margin-top: 18px;">
     <table class="styled-table">
         <tr>
@@ -24,12 +23,12 @@
             <td>{{ teacher.user.get_full_name|default:teacher.user.username }}</td>
             <td>{{ teacher.user.email }}</td>
             <td>
-                <a href="{% url 'raspisanie:teacher_update' teacher.pk %}">Редактировать</a>
-                <a href="{% url 'raspisanie:teacher_delete' teacher.pk %}" style="margin-left:10px; color: #dc3545;">Удалить</a>
+                <a href="{% url 'teacher_update' teacher.pk %}">Редактировать</a> |
+                <a href="{% url 'teacher_delete' teacher.pk %}">Удалить</a>
             </td>
         </tr>
         {% empty %}
-        <tr><td colspan="3">Нет доступных преподавателей</td></tr>
+        <tr><td colspan="3">Нет преподавателей</td></tr>
         {% endfor %}
     </table>
     </div>
