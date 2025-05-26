@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Расписание - Колледж КТ МТУСИ</title>
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+    <script src="js/calendar.js"></script>
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="{% url 'index' %}">Главная</a>
+        <a href="{% url 'about' %}">О колледже</a>
+        <a href="{% url 'main' %}" class="active">Расписание</a>
+        <a href="{% url 'contacts' %}">Контакты</a>
+    </nav>
+    {% if not request.user.is_authenticated %}
+        <a href="{% url 'login' %}" class="login-btn-fixed">Войти</a>
+    {% endif %}
+</header>
+
+<div class="main">
+    <aside>
+        <div class="calendar-container">
+            <table class="calendar"><tbody></tbody></table>
+        </div>
+        <div class="contacts">
+            <h2>Контакты</h2>
+            <p><strong>Директорат:</strong><br>+7 (495) 452-18-11</p>
+            <p><strong>Приемная комиссия:</strong><br>+7 (499) 457-55-34</p>
+            <p><strong>Email:</strong><br>ctmtuci@mtuci.ru</p>
+        </div>
+    </aside>
+
+    <div class="content">
+        <div class="groups-container">
+            <div class="groups-block">
+                <div class="groups-title">На базе 9 классов</div>
+                <div class="groups-list">
+                    <a href="{% url 'group_week_schedule' %}?group=ИСП9-124А">ИСП9-124А</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ИСП9-124Б">ИСП9-124Б</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ОИБ9-124Б">ОИБ9-124Б</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ОИБ9-124П">ОИБ9-124П</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ССА9-124А">ССА9-124А</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ССА9-124Б">ССА9-124Б</a>
+                </div>
+            </div>
+            <div class="groups-block">
+                <div class="groups-title">На базе 11 классов</div>
+                <div class="groups-list">
+                    <a href="{% url 'group_week_schedule' %}?group=ИСП11-322АП">ИСП11-322АП</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ИСП11-322БП">ИСП11-322БП</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ССА11-322П">ССА11-322П</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ССА11-223П">ССА11-223П</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ИСП11-124БП">ИСП11-124БП</a>
+                    <a href="{% url 'group_week_schedule' %}?group=ОИБ11-124П">ОИБ11-124П</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer style="margin-top: 40px; text-align: center; padding: 20px; background: #f5f5f5; border-top: 1px solid #ddd;">
+    © 2025 Колледж телекоммуникаций МТУСИ. Все права защищены.
+</footer>
+
+<script src="{% static 'js/calendar.js' %}"></script>
+
+<style>
+.login-btn-fixed {
+    position: fixed;
+    top: 18px;
+    right: 32px;
+    z-index: 1000;
+    background: #3f0ea5;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(63,14,165,0.08);
+    transition: background 0.2s;
+}
+.login-btn-fixed:hover {
+    background: #5931c5;
+}
+</style>
+
+</body>
+</html>

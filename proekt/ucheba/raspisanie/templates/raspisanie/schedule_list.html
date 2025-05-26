@@ -1,0 +1,83 @@
+{% extends 'raspisanie/panel_base.html' %}
+{% block title %}Расписание{% endblock %}
+{% block menu %}
+    <a href="{% url 'admin_panel_home' %}">Главная</a>
+    <a href="{% url 'user_list' %}">Пользователи</a>
+    <a href="{% url 'group_list' %}">Группы</a>
+    <a href="{% url 'teacher_list' %}">Преподаватели</a>
+    <a href="{% url 'room_list' %}">Кабинеты</a>
+    <a href="{% url 'subject_list' %}">Предметы</a>
+    <a href="{% url 'schedule_list' %}">Расписание</a>
+{% endblock %}
+{% block content %}
+    <h2>Расписание</h2>
+    <a href="{% url 'schedule_create' %}" style="margin-bottom: 20px; display: inline-block; background: #3f0ea5; color: #fff; padding: 8px 18px; border-radius: 8px; text-decoration: none;">Добавить запись</a>
+    <div style="overflow-x:auto; margin-top: 18px;">
+    <table class="styled-table">
+        <tr>
+            <th>Группа</th>
+            <th>Предмет</th>
+            <th>Преподаватель</th>
+            <th>День</th>
+            <th>Время</th>
+            <th>Действия</th>
+        </tr>
+        {% for s in schedules %}
+        <tr>
+            <td>{{ s.group.name }}</td>
+            <td>{{ s.subject.name }}</td>
+            <td>{{ s.teacher.user.get_full_name|default:s.teacher.user.username }}</td>
+            <td>{{ s.get_day_display }}</td>
+            <td>{{ s.time }}</td>
+            <td>
+                <a href="{% url 'schedule_update' s.pk %}">Редактировать</a> |
+                <a href="{% url 'schedule_delete' s.pk %}">Удалить</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+    <style>
+    .styled-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(63,14,165,0.07);
+        overflow: hidden;
+        font-size: 15px;
+    }
+    .styled-table th, .styled-table td {
+        padding: 12px 10px;
+        text-align: left;
+    }
+    .styled-table th {
+        background: #f5f5fa;
+        color: #3f0ea5;
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+    .styled-table tr:nth-child(even) {
+        background: #fafaff;
+    }
+    .styled-table tr:nth-child(odd) {
+        background: #fff;
+    }
+    .styled-table tr:hover {
+        background: #f0f0fa;
+        transition: background 0.2s;
+    }
+    .styled-table td {
+        border-bottom: 1px solid #ececf6;
+    }
+    .styled-table tr:last-child td {
+        border-bottom: none;
+    }
+    @media (max-width: 900px) {
+        .styled-table th, .styled-table td { padding: 8px 4px; font-size: 13px; }
+    }
+    </style>
+{% endblock %} 

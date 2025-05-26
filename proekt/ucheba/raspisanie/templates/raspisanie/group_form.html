@@ -1,0 +1,22 @@
+{% extends 'raspisanie/panel_base.html' %}
+{% block title %}{% if group %}Редактировать группу{% else %}Создать группу{% endif %}{% endblock %}
+{% block menu %}
+    <a href="{% url 'admin_panel_home' %}">Главная</a>
+    <a href="{% url 'user_list' %}">Пользователи</a>
+    <a href="{% url 'group_list' %}">Группы</a>
+    <a href="{% url 'teacher_list' %}">Преподаватели</a>
+    <a href="{% url 'room_list' %}">Кабинеты</a>
+    <a href="{% url 'subject_list' %}">Предметы</a>
+    <a href="{% url 'schedule_list' %}">Расписание</a>
+{% endblock %}
+{% block content %}
+    <h2>{% if group %}Редактировать группу{% else %}Создать группу{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>Название группы:<br>
+            <input type="text" name="name" value="{{ group.name|default:'' }}" required>
+        </label><br><br>
+        <button type="submit" style="background:#3f0ea5; color:#fff; padding:8px 18px; border-radius:8px;">Сохранить</button>
+        <a href="{% url 'group_list' %}" style="margin-left:20px;">Отмена</a>
+    </form>
+{% endblock %} 

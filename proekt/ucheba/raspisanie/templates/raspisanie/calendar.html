@@ -1,0 +1,112 @@
+{% extends 'raspisanie/panel_base.html' %}
+{% load static %}
+{% block title %}Календарь{% endblock %}
+{% block menu %}
+    {% if request.user.is_authenticated and request.user.profile and request.user.profile.role == 'teacher' %}
+        <a href="{% url 'schedule_table' %}">Общее расписание</a>
+        <a href="{% url 'teacher_panel_home' %}">Панель преподавателя</a>
+    {% else %}
+        <a href="{% url 'admin_panel_home' %}">Главная</a>
+        <a href="{% url 'user_list' %}">Пользователи</a>
+        <a href="{% url 'group_list' %}">Группы</a>
+        <a href="{% url 'teacher_list' %}">Преподаватели</a>
+        <a href="{% url 'subject_list' %}">Предметы</a>
+        <a href="{% url 'schedule_list' %}">Расписание (CRUD)</a>
+        <a href="{% url 'schedule_table' %}">Общее расписание</a>
+        <a href="{% url 'calendar' %}">Календарь</a>
+    {% endif %}
+{% endblock %}
+{% block content %}
+{% if request.user.is_authenticated and request.user.profile and request.user.profile.role == 'teacher' %}
+    <div style="max-width: 500px; margin: 60px auto; text-align: center;">
+        <a href="{% url 'teacher_panel_home' %}" class="btn-main" style="padding: 14px 32px; font-size: 1.2em; border-radius: 10px; background: linear-gradient(90deg, #3f0ea5 0%, #6a4cff 100%); color: #fff; text-decoration: none; font-weight: 600; box-shadow: 0 2px 8px rgba(63,14,165,0.08);">На главную панель преподавателя</a>
+    </div>
+{% else %}
+<div class="calendar-container">
+    <div class="calendar-header">
+        <button class="prev-month">←</button>
+        <h2 class="month-year"></h2>
+        <button class="next-month">→</button>
+    </div>
+    <table class="calendar">
+        <tbody></tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .calendar-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .calendar-header button {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 5px 15px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .calendar-header button:hover {
+        background-color: #f0f0f0;
+    }
+
+    .calendar {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .calendar th {
+        padding: 10px;
+        text-align: center;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+    }
+
+    .calendar td {
+        padding: 15px;
+        text-align: center;
+        border: 1px solid #dee2e6;
+        transition: background-color 0.3s;
+    }
+
+    .calendar td:hover {
+        background-color: #f8f9fa;
+    }
+
+    .calendar td.today {
+        background-color: #e3f2fd;
+        font-weight: bold;
+    }
+
+    .calendar td.has-class {
+        background-color: #e8f5e9;
+    }
+
+    .month-year {
+        margin: 0;
+        font-size: 24px;
+        color: #333;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/calendar.js' %}"></script>
+{% endblock %} 

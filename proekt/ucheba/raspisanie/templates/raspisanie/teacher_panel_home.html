@@ -1,0 +1,166 @@
+{% extends 'raspisanie/panel_base.html' %}
+{% block title %}Панель преподавателя{% endblock %}
+{% block content %}
+<div class="teacher-panel-container">
+    <div class="teacher-header">
+        <h2>Панель преподавателя</h2>
+        <p>Добро пожаловать, <b>{{ request.user.get_full_name|default:request.user.username }}</b>!</p>
+    </div>
+    <div class="teacher-stats-grid">
+        <div class="teacher-stat-card">
+            <div class="stat-label">Занятий сегодня</div>
+            <div class="stat-value">{{ today_count }}</div>
+        </div>
+        <div class="teacher-stat-card">
+            <div class="stat-label">Занятий на неделе</div>
+            <div class="stat-value">{{ week_count }}</div>
+        </div>
+        <div class="teacher-stat-card">
+            <div class="stat-label">Групп ведёте</div>
+            <div class="stat-value">{{ groups_count }}</div>
+        </div>
+        <div class="teacher-stat-card">
+            <div class="stat-label">Ближайшее занятие</div>
+            <div class="stat-value">{{ next_lesson|default:'—' }}</div>
+        </div>
+    </div>
+    <div class="teacher-block teacher-alert">
+        <b>Важные уведомления:</b>
+        <ul style="margin: 8px 0 0 18px;">
+            <li>Проверьте расписание на неделю.</li>
+            <li>Если есть переносы — сообщите администрации.</li>
+        </ul>
+    </div>
+    <div class="teacher-block">
+        <b>Ближайшие занятия:</b>
+        <table class="teacher-table">
+            <tr>
+                <th>Дата</th>
+                <th>Время</th>
+                <th>Группа</th>
+                <th>Предмет</th>
+            </tr>
+            {% for s in nearest_schedule %}
+            <tr>
+                <td>{{ s.date|date:'d.m.Y' }}</td>
+                <td>{{ s.time }}</td>
+                <td>{{ s.group.name }}</td>
+                <td>{{ s.subject.name }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">Нет ближайших занятий</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<style>
+.teacher-panel-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+}
+.teacher-header {
+    background: linear-gradient(90deg, #3f0ea5 0%, #6a4cff 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 32px 18px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 10px rgba(63,14,165,0.08);
+}
+.teacher-header h2 {
+    margin: 0 0 8px 0;
+    font-size: 2em;
+}
+.teacher-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+}
+.teacher-stat-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(63,14,165,0.06);
+    padding: 18px 18px 12px 18px;
+    text-align: center;
+}
+.stat-label {
+    color: #888;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+.stat-value {
+    font-size: 1.7em;
+    font-weight: bold;
+    color: #3f0ea5;
+}
+.teacher-block {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(63,14,165,0.04);
+    margin-bottom: 18px;
+    padding: 16px 20px 12px 20px;
+}
+.teacher-alert {
+    background: #fffbe6;
+    border-left: 4px solid #ffe066;
+    color: #b8860b;
+}
+.teacher-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 15px;
+    margin-top: 10px;
+}
+.teacher-table th, .teacher-table td {
+    padding: 10px 8px;
+    text-align: left;
+}
+.teacher-table th {
+    background: #f5f5fa;
+    color: #3f0ea5;
+    font-weight: 600;
+}
+.teacher-table tr:nth-child(even) {
+    background: #fafaff;
+}
+.teacher-table tr:nth-child(odd) {
+    background: #fff;
+}
+.teacher-table tr:hover {
+    background: #f0f0fa;
+    transition: background 0.2s;
+}
+.teacher-table td {
+    border-bottom: 1px solid #ececf6;
+}
+.teacher-table tr:last-child td {
+    border-bottom: none;
+}
+@media (max-width: 700px) {
+    .teacher-header { padding: 14px 8px; }
+    .teacher-panel-container { padding: 0 4px; }
+    .teacher-stats-grid { grid-template-columns: 1fr; }
+}
+</style>
+{% endblock %}
+
+{% block menu %}
+    {% if request.user.is_authenticated and request.user.profile and request.user.profile.role == 'teacher' %}
+        <a href="{% url 'schedule_table' %}">Общее расписание</a>
+        <a href="{% url 'teacher_panel_home' %}">Панель преподавателя</a>
+    {% else %}
+        <a href="{% url 'admin_panel_home' %}">Главная</a>
+        <a href="{% url 'user_list' %}">Пользователи</a>
+        <a href="{% url 'group_list' %}">Группы</a>
+        <a href="{% url 'teacher_list' %}">Преподаватели</a>
+        <a href="{% url 'subject_list' %}">Предметы</a>
+        <a href="{% url 'schedule_list' %}">Расписание (CRUD)</a>
+        <a href="{% url 'schedule_table' %}">Общее расписание</a>
+        <a href="{% url 'calendar' %}">Календарь</a>
+    {% endif %}
+{% endblock %} 

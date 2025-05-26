@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация - Колледж КТ МТУСИ</title>
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+    <link rel="stylesheet" href="{% static 'style/auth.css' %}">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Регистрация</h2>
+                <p class="auth-subtitle">Создайте аккаунт для доступа к системе расписания</p>
+            </div>
+            <form method="post" class="auth-form">
+                {% csrf_token %}
+                {% if form.errors %}
+                    <div class="auth-error">
+                        <p>Пожалуйста, проверьте правильность введенных данных</p>
+                    </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="id_username">Имя пользователя</label>
+                    {{ form.username }}
+                    <small class="form-help">Только буквы, цифры и символы @/./+/-/_.</small>
+                </div>
+                <div class="form-group">
+                    <label for="id_email">Электронная почта</label>
+                    {{ form.email }}
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Пароль</label>
+                    {{ form.password }}
+                </div>
+                <div class="form-group">
+                    <label for="id_role">Роль</label>
+                    {{ form.role }}
+                </div>
+                <button type="submit" class="auth-button">Зарегистрироваться</button>
+            </form>
+            <div class="auth-footer">
+                <p>Уже есть аккаунт? <a href="{% url 'login' %}" class="auth-link">Войти</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

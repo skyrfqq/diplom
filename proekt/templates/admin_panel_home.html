@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}Панель администратора{% endblock %}
+
+{% block content %}
+<div class="admin-panel">
+    <div class="admin-header">
+        <h1>Панель администратора</h1>
+        <p>Добро пожаловать, {{ request.user.username }}!</p>
+    </div>
+
+    <div class="admin-content">
+        <!-- Статистика -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <div class="stat-info">
+                    <h3>Пользователи</h3>
+                    <p>{{ total_users }}</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <div class="stat-info">
+                    <h3>Преподаватели</h3>
+                    <p>{{ total_teachers }}</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-book"></i>
+                <div class="stat-info">
+                    <h3>Предметы</h3>
+                    <p>{{ total_subjects }}</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-users-cog"></i>
+                <div class="stat-info">
+                    <h3>Группы</h3>
+                    <p>{{ total_groups }}</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-calendar-alt"></i>
+                <div class="stat-info">
+                    <h3>Расписания</h3>
+                    <p>{{ total_schedules }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Быстрые действия -->
+        <div class="quick-actions">
+            <h2>Быстрые действия</h2>
+            <div class="action-buttons">
+                <a href="{% url 'admin_panel_users' %}" class="action-button">
+                    <i class="fas fa-user-plus"></i>
+                    Добавить пользователя
+                </a>
+                <a href="{% url 'admin_panel_groups' %}" class="action-button">
+                    <i class="fas fa-users"></i>
+                    Создать группу
+                </a>
+                <a href="{% url 'admin_panel_teachers' %}" class="action-button">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    Добавить преподавателя
+                </a>
+                <a href="{% url 'admin_panel_subjects' %}" class="action-button">
+                    <i class="fas fa-book"></i>
+                    Добавить предмет
+                </a>
+                <a href="{% url 'admin_panel_schedules' %}" class="action-button">
+                    <i class="fas fa-calendar-plus"></i>
+                    Создать расписание
+                </a>
+            </div>
+        </div>
+
+        <!-- Дашборд: теперь на всю ширину -->
+        <div class="dashboard-section" style="margin-bottom: 30px;">
+            <h2>Последние добавленные</h2>
+            <div class="dashboard-cards">
+                <div class="dashboard-card">
+                    <h3>Пользователи</h3>
+                    <ul>
+                        {% for user in latest_users %}
+                        <li>{{ user.username }} ({{ user.date_joined|date:"d.m.Y" }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Группы</h3>
+                    <ul>
+                        {% for group in latest_groups %}
+                        <li>{{ group.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Преподаватели</h3>
+                    <ul>
+                        {% for teacher in latest_teachers %}
+                        <li>{{ teacher.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Предметы</h3>
+                    <ul>
+                        {% for subject in latest_subjects %}
+                        <li>{{ subject.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-section" style="margin-bottom: 30px;">
+            <h2>Статистика</h2>
+            <div class="dashboard-cards">
+                <div class="dashboard-card">
+                    <h3>Топ групп по количеству студентов</h3>
+                    <ul>
+                        {% for group in groups_stats %}
+                        <li>{{ group.name }} - {{ group.student_count }} студентов</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Топ преподавателей по количеству занятий</h3>
+                    <ul>
+                        {% for teacher in teachers_stats %}
+                        <li>{{ teacher.name }} - {{ teacher.schedule_count }} занятий</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Уведомления -->
+        <div class="notifications">
+            <h2>Уведомления</h2>
+            <div class="notification-list">
+                <div class="notification">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Добро пожаловать в панель администратора! Здесь вы можете управлять всеми аспектами системы.</p>
+                </div>
+                <div class="notification">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p>Не забудьте проверить расписание на следующую неделю.</p>
+                </div>
+                <div class="notification">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Система работает в штатном режиме.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

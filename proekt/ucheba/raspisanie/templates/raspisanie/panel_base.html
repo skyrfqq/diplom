@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Панель управления{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+    <style>
+        body {
+            background: #f8f8fb;
+        }
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, #3f0ea5 60%, #6a4cff 100%);
+            color: #fff;
+            padding: 16px 32px;
+            box-shadow: 0 2px 12px rgba(63,14,165,0.08);
+            border-radius: 0 0 18px 18px;
+        }
+        .panel-header .profile {
+            font-size: 17px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .panel-header .logout-btn {
+            background: #fff;
+            color: #3f0ea5;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(63,14,165,0.08);
+            transition: background 0.2s, color 0.2s;
+        }
+        .panel-header .logout-btn:hover {
+            background: #f0f0fa;
+            color: #6a4cff;
+        }
+        .panel-menu {
+            background: #fff;
+            padding: 12px 32px;
+            box-shadow: 0 2px 8px rgba(63,14,165,0.04);
+            border-radius: 0 0 16px 16px;
+            margin-bottom: 18px;
+            display: flex;
+            gap: 18px;
+        }
+        .panel-menu a {
+            color: #3f0ea5;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            transition: background 0.18s, color 0.18s;
+        }
+        .panel-menu a:hover, .panel-menu a.active {
+            background: #f0f0fa;
+            color: #6a4cff;
+        }
+        .panel-content {
+            padding: 32px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 16px rgba(63,14,165,0.06);
+            margin: 0 32px 32px 32px;
+            min-height: 400px;
+        }
+        @media (max-width: 900px) {
+            .panel-content { padding: 16px; margin: 0 8px 16px 8px; }
+            .panel-header, .panel-menu { padding: 12px 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="panel-header">
+        <div class="profile">
+            {% if request.user.is_authenticated %}
+                {{ request.user.username }}
+                {% if request.user.profile %}
+                    ({{ request.user.profile.get_role_display }})
+                {% endif %}
+            {% endif %}
+        </div>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="logout-btn">Выйти</a>
+        {% endif %}
+    </div>
+    <div class="panel-menu">
+        {% block menu %}
+            {% if request.user.is_authenticated and request.user.profile and request.user.profile.role == 'teacher' %}
+                <a href="{% url 'schedule_table' %}">Общее расписание</a>
+                <a href="{% url 'calendar' %}">Календарь</a>
+            {% else %}
+                <a href="{% url 'schedule_list' %}">Расписание (CRUD)</a>
+                <a href="{% url 'schedule_table' %}">Общее расписание</a>
+                <a href="{% url 'calendar' %}">Календарь</a>
+            {% endif %}
+        {% endblock %}
+    </div>
+    <div class="panel-content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html> 

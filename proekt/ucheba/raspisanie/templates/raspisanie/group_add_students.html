@@ -1,0 +1,25 @@
+{% extends 'raspisanie/panel_base.html' %}
+{% block title %}Добавить студентов в группу {{ group.name }}{% endblock %}
+{% block menu %}
+    <a href="{% url 'admin_panel_home' %}">Главная</a>
+    <a href="{% url 'user_list' %}">Пользователи</a>
+    <a href="{% url 'group_list' %}">Группы</a>
+    <a href="{% url 'teacher_list' %}">Преподаватели</a>
+    <a href="{% url 'subject_list' %}">Предметы</a>
+    <a href="{% url 'schedule_list' %}">Расписание</a>
+{% endblock %}
+{% block content %}
+    <h2>Добавить студентов в группу {{ group.name }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>Выберите студентов:<br>
+            <select name="students" multiple size="10" style="width: 350px;">
+                {% for student in available_students %}
+                    <option value="{{ student.id }}">{{ student.user.get_full_name|default:student.user.username }} ({{ student.user.username }})</option>
+                {% endfor %}
+            </select>
+        </label><br><br>
+        <button type="submit" style="background:#3f0ea5; color:#fff; padding:8px 18px; border-radius:8px;">Добавить</button>
+        <a href="{% url 'group_students' group.pk %}" style="margin-left:20px;">Отмена</a>
+    </form>
+{% endblock %} 

@@ -1,0 +1,22 @@
+{% load get_item %}
+<h2>Расписание для {{ selected_group.name }}</h2>
+<table>
+    <thead>
+        <tr>
+            <th>День</th>
+            {% for time in pair_times %}
+                <th>{{ time }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for day_code, day_name in days %}
+            <tr>
+                <td>{{ day_name }}</td>
+                {% for time in pair_times %}
+                    <td>{{ schedule_map|get_item:day_code|get_item:time|default:"" }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table> 

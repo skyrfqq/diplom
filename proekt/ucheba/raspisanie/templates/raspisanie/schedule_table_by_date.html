@@ -1,0 +1,21 @@
+<h2>Расписание на {{ selected_date|date:"d.m.Y" }}</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Группа</th>
+            {% for time in pair_times %}
+                <th>{{ time }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for group in groups %}
+            <tr>
+                <td>{{ group.name }}</td>
+                {% for time in pair_times %}
+                    <td>{{ schedule_map|get_item:group.name|get_item:time|default:"" }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table> 

@@ -1,0 +1,188 @@
+{% extends 'raspisanie/panel_base.html' %}
+{% block title %}Создать расписание на день{% endblock %}
+{% block menu %}
+    <a href="{% url 'admin_panel_home' %}">Главная</a>
+    <a href="{% url 'user_list' %}">Пользователи</a>
+    <a href="{% url 'group_list' %}">Группы</a>
+    <a href="{% url 'teacher_list' %}">Преподаватели</a>
+    <a href="{% url 'subject_list' %}">Предметы</a>
+    <a href="{% url 'schedule_list' %}">Расписание</a>
+{% endblock %}
+{% block content %}
+<div class="schedule-form-card">
+    <h2>Создать расписание на день</h2>
+    {% if errors %}
+        <div class="form-errors">
+            <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-row">
+            <label>Группа:<br>
+                <select name="group" required>
+                    {% for group in groups %}
+                        <option value="{{ group.id }}">{{ group.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Дата:<br>
+                <input type="date" name="date" required>
+            </label>
+        </div>
+        <table class="schedule-table-modern">
+            <tr>
+                <th>Время</th>
+                <th>Предмет</th>
+                <th>Преподаватель</th>
+            </tr>
+            {% for time in pair_times %}
+            <tr>
+                <td>{{ time }}</td>
+                <td>
+                    <select name="subject_{{ time }}">
+                        <option value="">—</option>
+                        {% for subject in subjects %}
+                            <option value="{{ subject.id }}">{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select name="teacher_{{ time }}">
+                        <option value="">—</option>
+                        {% for teacher in teachers %}
+                            <option value="{{ teacher.id }}">{{ teacher.user.get_full_name|default:teacher.user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="form-actions">
+            <button type="submit" class="btn-main">Сохранить</button>
+            <a href="{% url 'schedule_list' %}" class="btn-cancel">Отмена</a>
+        </div>
+    </form>
+</div>
+<style>
+.schedule-form-card {
+    max-width: 700px;
+    margin: 32px auto 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(63,14,165,0.08);
+    padding: 32px 36px 28px 36px;
+}
+.schedule-form-card h2 {
+    margin-top: 0;
+    color: #3f0ea5;
+    font-size: 1.7em;
+    margin-bottom: 18px;
+}
+.form-row {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+}
+.form-row label {
+    font-weight: 500;
+    color: #222;
+    font-size: 1.1em;
+}
+.form-row select, .form-row input[type="date"] {
+    margin-top: 6px;
+    padding: 7px 12px;
+    border-radius: 7px;
+    border: 1px solid #d1d5db;
+    font-size: 1em;
+    background: #fafaff;
+    transition: border 0.2s;
+}
+.form-row select:focus, .form-row input[type="date"]:focus {
+    border: 1.5px solid #6a4cff;
+    outline: none;
+}
+.schedule-table-modern {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 15px;
+    margin-top: 10px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(63,14,165,0.04);
+}
+.schedule-table-modern th, .schedule-table-modern td {
+    padding: 10px 8px;
+    text-align: left;
+}
+.schedule-table-modern th {
+    background: #f5f5fa;
+    color: #3f0ea5;
+    font-weight: 600;
+}
+.schedule-table-modern tr:nth-child(even) {
+    background: #fafaff;
+}
+.schedule-table-modern tr:nth-child(odd) {
+    background: #fff;
+}
+.schedule-table-modern tr:hover {
+    background: #f0f0fa;
+    transition: background 0.2s;
+}
+.schedule-table-modern td {
+    border-bottom: 1px solid #ececf6;
+}
+.schedule-table-modern tr:last-child td {
+    border-bottom: none;
+}
+.form-actions {
+    margin-top: 18px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
+.btn-main {
+    background: linear-gradient(90deg, #3f0ea5 0%, #6a4cff 100%);
+    color: #fff;
+    border: none;
+    padding: 10px 28px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+    box-shadow: 0 2px 8px rgba(63,14,165,0.08);
+}
+.btn-main:hover {
+    background: #6a4cff;
+    color: #fff;
+}
+.btn-cancel {
+    color: #6a4cff;
+    text-decoration: underline;
+    font-size: 1.1em;
+    margin-left: 10px;
+}
+.form-errors {
+    color: #b80000;
+    background: #fff0f0;
+    border-left: 4px solid #ffbaba;
+    border-radius: 7px;
+    padding: 10px 18px;
+    margin-bottom: 18px;
+}
+@media (max-width: 700px) {
+    .schedule-form-card { padding: 12px 4px; }
+    .form-row { flex-direction: column; gap: 12px; }
+}
+</style>
+{% endblock %} 

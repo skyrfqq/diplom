@@ -1,0 +1,50 @@
+{% extends 'raspisanie/panel_base.html' %}
+{% load get_item %}
+{% block title %}Расписание для {{ group.name }}{% endblock %}
+{% block content %}
+<h2>Расписание для {{ group.name }} с {{ start_date|date:"d.m.Y" }} по {{ end_date|date:"d.m.Y" }}</h2>
+<table class="schedule-table">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>День</th>
+            {% for time in pair_times %}
+                <th>{{ time }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for date, times in schedule_map.items %}
+            <tr>
+                <td>{{ date|date:"d.m.Y" }}</td>
+                <td>{{ date|date:"l" }}</td>
+                {% for time in pair_times %}
+                    <td>{{ times|get_item:time }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block menu %}
+    {% if not request.user.is_authenticated %}
+        {# Пустое меню для неавторизованных #}
+    {% elif request.user.profile %}
+        {% if request.user.profile.role == 'student' %}
+            {# Пустое меню для студентов #}
+        {% elif request.user.profile.role == 'teacher' %}
+            <a href="{% url 'schedule_table' %}">Общее расписание</a>
+            <a href="{% url 'teacher_panel_home' %}">Панель преподавателя</a>
+        {% else %}
+            <a href="{% url 'admin_panel_home' %}">Главная</a>
+            <a href="{% url 'user_list' %}">Пользователи</a>
+            <a href="{% url 'group_list' %}">Группы</a>
+            <a href="{% url 'teacher_list' %}">Преподаватели</a>
+            <a href="{% url 'subject_list' %}">Предметы</a>
+            <a href="{% url 'schedule_list' %}">Расписание (CRUD)</a>
+            <a href="{% url 'schedule_table' %}">Общее расписание</a>
+            <a href="{% url 'calendar' %}">Календарь</a>
+        {% endif %}
+    {% endif %}
+{% endblock %} 
