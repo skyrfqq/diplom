@@ -86,11 +86,20 @@ USE_TZ = True
 
 
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+# Настройки для продакшена
+DEBUG = False
+ALLOWED_HOSTS = ['*']  # Замените на ваш домен в продакшене
+
+# Добавляем настройки для статических файлов
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
