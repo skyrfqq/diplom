@@ -1,22 +1,30 @@
-{% load get_item %}
-<h2>Расписание на {{ selected_date|date:"d.m.Y" }}</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Группа</th>
-            {% for time in pair_times %}
-                <th>{{ time }}</th>
-            {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for group in groups %}
+{% extends 'raspisanie/panel_base.html' %}
+{% load static get_item %}
+
+{% block title %}Расписание на {{ selected_date|date:"d.m.Y" }}{% endblock %}
+
+{% block content %}
+<div class="schedule-table-wrapper">
+    <h2 style="margin-bottom: 18px;">Расписание на {{ selected_date|date:"d.m.Y" }}</h2>
+    <table class="schedule-table">
+        <thead>
             <tr>
-                <td>{{ group.name }}</td>
+                <th>Группа</th>
                 {% for time in pair_times %}
-                    <td>{{ schedule_map|get_item:group.name|get_item:time|default:"" }}</td>
+                    <th>{{ time }}</th>
                 {% endfor %}
             </tr>
-        {% endfor %}
-    </tbody>
-</table> 
+        </thead>
+        <tbody>
+            {% for group in groups %}
+                <tr>
+                    <td>{{ group.name }}</td>
+                    {% for time in pair_times %}
+                        <td>{{ schedule_map|get_item:group.name|get_item:time|default:"" }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %} 
