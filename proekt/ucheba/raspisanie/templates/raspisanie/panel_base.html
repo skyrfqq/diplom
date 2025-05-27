@@ -94,11 +94,11 @@
         {% block menu %}
             {% if request.user.is_authenticated and request.user.profile and request.user.profile.role == 'teacher' %}
                 <a href="{% url 'schedule_table' %}">Общее расписание</a>
-                <a href="{% url 'calendar' %}">Календарь</a>
+                <a href="{% url 'calendar_view' %}">Календарь</a>
             {% else %}
                 <a href="{% url 'schedule_list' %}">Расписание (CRUD)</a>
                 <a href="{% url 'schedule_table' %}">Общее расписание</a>
-                <a href="{% url 'calendar' %}">Календарь</a>
+                <a href="{% url 'calendar_view' %}">Календарь</a>
             {% endif %}
         {% endblock %}
     </div>
