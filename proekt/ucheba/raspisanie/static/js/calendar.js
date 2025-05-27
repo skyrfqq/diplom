@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 cell.classList.add("today");
             }
             cell.addEventListener('click', function() {
-                window.location.href = `/schedule-table/?date=${dateStr}`;
+                window.location.href = `/schedule/table/?date=${dateStr}`;
             });
             return cell;
         }
