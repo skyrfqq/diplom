@@ -87,11 +87,13 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
-# Настройки для продакшена
-DEBUG = False
-ALLOWED_HOSTS = ['*']  # Замените на ваш домен в продакшене
+# # Настройки для продакшена (ЗАКОММЕНТИРУЙТЕ ИЛИ УДАЛИТЕ ЭТО ПОКА ЧТО)
+# DEBUG = False # Закомментировано или удалено
+# ALLOWED_HOSTS = ['*']  # Закомментировано или удалено
 
 # Добавляем настройки для статических файлов
 STATICFILES_FINDERS = [
