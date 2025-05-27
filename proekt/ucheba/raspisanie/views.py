@@ -615,12 +615,34 @@ def user_delete(request, pk):
     return render(request, 'raspisanie/user_confirm_delete.html', {'user': user})
 
 def schedule_table(request):
-    """
-    Отображает расписание в виде таблицы.
-    Показывает все занятия на неделю для выбранной группы.
-    """
     groups = Group.objects.all()
     selected_group = request.GET.get('group')
+    selected_date = request.GET.get('date')
+    pair_times = [
+        '8:30–9:15', '9:30–10:15', '10:25–11:10', '11:20–12:05', '12:25–13:10', '13:20–14:05', '14:15–15:00'
+    ]
+    days = Schedule.DAYS
+
+    if selected_date:
+        from datetime import datetime
+        date_obj = datetime.strptime(selected_date, "%Y-%m-%d").date()
+        schedule_map = {}
+        for group in groups:
+            schedule_map[group.name] = {}
+            for time in pair_times:
+                s = Schedule.objects.filter(group=group, date=date_obj, time=time).first()
+                if s:
+                    schedule_map[group.name][time] = f"{s.subject.name} ({s.teacher.user.get_full_name()})"
+                else:
+                    schedule_map[group.name][time] = ""
+        return render(request, 'raspisanie/schedule_table_by_date.html', {
+            'groups': groups,
+            'pair_times': pair_times,
+            'schedule_map': schedule_map,
+            'selected_date': date_obj,
+        })
+
+    # Старый код для отображения по группам
     schedules = []
     if selected_group:
         schedules = Schedule.objects.filter(
